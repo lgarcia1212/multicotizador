@@ -19,7 +19,7 @@ do {
     let sumaAsegurada = parseInt(prompt("Ingrese el valor de su vehiculo"));
 
     function calcularAntiguedad(anio) {
-        antiguedad = 2023 - anio;
+        antiguedad = 2023 - anio.trim();
     }
     calcularAntiguedad(anio)
     
@@ -59,7 +59,7 @@ do {
     }
 
     cotizar(antiguedad, sumaAsegurada)
-    alert("Usted cotizo el vehiculo: " + marca.toLocaleUpperCase().concat(" ", modelo.toLocaleUpperCase()," - ", anio) + "\n---> Cobertura Todo Riesgo: $ " + cotizacionTR + "\n---> Cobertura C: $ " + cotizacionC + "\n---> Cobertura B: $ " + cotizacionB + "\n---> Cobertura A: $ " + cotizacionA)
+    alert("Usted cotizo el vehiculo: " + marca.trim().toLocaleUpperCase().concat(" ", modelo.trim().toLocaleUpperCase()," - ", anio.trim()) + "\n---> Cobertura Todo Riesgo: $ " + cotizacionTR + "\n---> Cobertura C: $ " + cotizacionC + "\n---> Cobertura B: $ " + cotizacionB + "\n---> Cobertura A: $ " + cotizacionA)
     continuar = prompt("¿Desea cotizar otro auto: Si / No?");
 } while(continuar.toUpperCase().trim() == "SI");
 
