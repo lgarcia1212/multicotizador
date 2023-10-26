@@ -1,5 +1,9 @@
 let vehiculos = []
 
+const guardarLocal = (clave, valor) => {
+    localStorage.setItem(clave, valor)
+};
+
 class Vehiculo {
     constructor(
         marca,
@@ -21,7 +25,7 @@ class Vehiculo {
         this.cotizacionA = cotizacionA;
     }    
     toString = () => {
-        return this.marca.toString().toUpperCase().trim() + " " + this.modelo.toString().toUpperCase().trim() + " - " + this.anio.toString().toUpperCase().trim() + " (Valor $: " + this.sumaAsegurada.toString().toUpperCase().trim() + ")\n  Cotizaciones:\n    Todo Riesgo: " + this.cotizacionTR.toString().toUpperCase().trim() + "\n    Cobertura C: " + this.cotizacionC.toString().toUpperCase().trim() + "\n    Cobertura B: " + this.cotizacionB.toString().toUpperCase().trim() + "\n    Cobertura A: " + this.cotizacionA.toString().toUpperCase().trim() + "\n\n"
+        return this.marca.toString().toUpperCase().trim() + " " + this.modelo.toString().toUpperCase().trim() + " - " + this.anio.toString().toUpperCase().trim() + " ($ Valor: " + this.sumaAsegurada.toString().toUpperCase().trim() + ")\n  Cotizaciones:\n    Todo Riesgo: " + this.cotizacionTR.toString().toUpperCase().trim() + "\n    Cobertura C: " + this.cotizacionC.toString().toUpperCase().trim() + "\n    Cobertura B: " + this.cotizacionB.toString().toUpperCase().trim() + "\n    Cobertura A: " + this.cotizacionA.toString().toUpperCase().trim() + "\n\n"
     }
 }
 
@@ -40,6 +44,31 @@ let cotizacionA = 0;
 
 function calcularAntiguedad(anio) {
     antiguedad = 2023 - anio;
+}
+
+const validacionVehiculo = (    
+    marca = "",
+    anio = 0,
+    modelo = "",
+    sumaAsegurada = 0
+    ) => {
+        let mensajesValidacion = [];
+        if(marca.length == 0){
+            mensajesValidacion.push("ERROR: Complete el campo MARCA");
+        }
+        if(anio == " "){
+            mensajesValidacion.push("ERROR: Complete el campo AÑO");
+        }else if(anio > 2023) {
+            mensajesValidacion.push("ERROR: El AÑO es incorrecto");
+        }
+        if(modelo == 0){
+            mensajesValidacion.push("ERROR: Complete el campo MODELO");
+        }
+        if(sumaAsegurada < 0){
+            mensajesValidacion.push("ERROR: La SUMA ASEGURADA es incorrecta");
+        }
+
+        return mensajesValidacion;
 }
 
 function cotizar (antiguedad, sumaAsegurada) {
@@ -77,24 +106,69 @@ function cotizar (antiguedad, sumaAsegurada) {
     }  
 }
 
+const registrarVehiculo = (marca, anio, modelo, sumaAsegurada) => {
+    const errores = validacionVehiculo(marca, anio, modelo, sumaAsegurada);
+    if (errores.length !== 0) {
+        console.log(errores)
+        return false;
+    }
+    let unVehiculo = new Vehiculo(marca, anio, modelo, sumaAsegurada, cotizacionTR, cotizacionC, cotizacionB, cotizacionA); 
+    vehiculos.push(unVehiculo);
+    return true;
+}
 
-do {
-    let marca = prompt("Ingrese la marca de su vehiculo");
-    let anio = prompt("Ingrese el año de fabricacion");
-    let modelo = prompt("ingrese el modelo completo");
-    let sumaAsegurada = parseInt(prompt("Ingrese el valor de su vehiculo"));
+
+
+
+const formularioCotizacion = document.getElementById ("form-cotizar");
+formularioCotizacion.addEventListener("submit", (e) => {
+    e.preventDefault();
+    let marca = document.getElementById("marca").value;
+    let anio = parseInt(document.getElementById("anio").value);
+    let modelo = document.getElementById("modelo").value;
+    let sumaAsegurada = parseInt(document.getElementById("valor").value);
 
     calcularAntiguedad(anio);
     cotizar(antiguedad, sumaAsegurada);
 
-    const unVehiculo = new Vehiculo(marca, anio, modelo, sumaAsegurada, cotizacionTR, cotizacionC, cotizacionB, cotizacionA); 
-    vehiculos.push(unVehiculo)
+    const registrarVehiculo = (marca, anio, modelo, sumaAsegurada) => {
+        const errores = validacionVehiculo(marca, anio, modelo, sumaAsegurada);
+        if (errores.length !== 0) {
+            console.log(errores)
+            return false;
+        }
+        let unVehiculo = new Vehiculo(marca, anio, modelo, sumaAsegurada, cotizacionTR, cotizacionC, cotizacionB, cotizacionA); 
+        vehiculos.push(unVehiculo);
+        return true;
+    }
 
-    continuar = prompt("¿Desea cotizar otro auto: Si / No?");
-} while(continuar.toUpperCase().trim() == "SI");
-alert("¡Gracias por utilizar el Multicotizador!")
+    if(registrarVehiculo(marca, anio, modelo, sumaAsegurada)) {
+        const contenedorCotizaciones = document.querySelector(".cotizaciones-list");
+        contenedorCotizaciones.innerHTML = "";
+        for(const vehiculo of vehiculos) {
+            let item = document.createElement("li");
+            item.className = "item-vehiculo";
+            item.innerHTML = `<ul class="marca">${vehiculo.marca.toUpperCase().trim()}</ul>
+                              <ul class="modelo">${vehiculo.modelo.toUpperCase().trim()}</ul>
+                              <ul class="anio">${vehiculo.anio}</ul>
+                              <ul class="suma-asegurada">$ ${vehiculo.sumaAsegurada}</ul>
+                              <ul class="cotizaciones">Todo Riesgo: $ ${vehiculo.cotizacionTR} Cobertura C: $ ${vehiculo.cotizacionC} Cobertura B: $ ${vehiculo.cotizacionB} Cobertura A: $ ${vehiculo.cotizacionA}</ul>`;
+            contenedorCotizaciones.appendChild(item);
+            guardarLocal("listadoCotizaciones", JSON.stringify(vehiculos));
+            formularioCotizacion.reset();   
 
+        }
 
-vehiculos.forEach((unVehiculo) => {
-    console.log(unVehiculo.toString())
+    }  
+    const listadoCotizaciones_recuperar = localStorage.getItem("listadoCotizaciones");
+    const listadoCotizaciones_parsear = JSON.parse(listadoCotizaciones_recuperar);
+    console.log(listadoCotizaciones_parsear);
 });
+
+
+
+
+
+
+
+
