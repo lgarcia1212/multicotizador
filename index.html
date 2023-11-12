@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 <body>
     <div class="row">
@@ -26,27 +27,27 @@
                 <div class="welcome col-3">
                     <h2 class="welcome__title">Bienvenido</h2>
                     <div class="welcome__p-container">
-                        <p class="welcome__p-container__first-p">Complete el formulario con los datos de su vehiculo para obtener una cotización.</p>
-                        <p class="welcome__p-container__second-p">O bien ingrese al sistema para acceder a su documentación.</p>
-                    </div>
-                    <div class="welcome__register-container">
-                        <input type="submit" value="Ingresar" class="welcome__register-container__button-login"></input>
-                        <a class="welcome__register-container__link-register" href="">Registrarse</a>
-                    </div>    
+                        <p class="welcome__p1-container">Complete el formulario con los datos de su vehiculo para obtener una cotización.</p>
+                        <ul class="welcome__ul-container">
+                            <li>Marca: ingresar el fabricante</li>
+                            <li>Año: año de fabricacion de la unidad</li>
+                            <li>Modelo: Modelo completo el vehiculo</li>
+                            <li>Valor del Vehiculo: valor de mercado.</li>
+                        </ul>
+                        <p class="welcome__p2-container">Luego de cotizar, encontrara los presupuestos debajo.</p>
+                    </div>   
                 </div>
 
                 <form autocomplete="off" class="form col-9" id="form-cotizar">
                     <div class="form__title row">
                         <h2>Complete el formulario</h2>
                     </div>
-                    <div class="form__row-1 row">
-                        <input class="form__row-1__item-1" placeholder="Marca" id="marca" required="">
-                        <input class="form__row-1__item-2" placeholder="Año" id="anio" required="">
-                    </div>
-                    
-                    <div class="form__row-2 row">
-                        <input class="form__row-2__item-1" placeholder="Modelo" id="modelo" required="">
-                        <input class="form__row-2__item-2" placeholder="Valor del vehiculo"  id="valor" required="">
+
+                    <div class="form__input-container">
+                        <input class="form__input-container__item" placeholder="Marca" id="marca">
+                        <input class="form__input-container__item" placeholder="Año" id="anio">        
+                        <input class="form__input-container__item" placeholder="Modelo" id="modelo">
+                        <input class="form__input-container__item" placeholder="Valor del vehiculo"  id="valor">
                     </div>
 
                     <div class="form__row-submit row" id="button-cotizar">
@@ -58,23 +59,28 @@
     </div>
     <div class="row">
         <div class="cotizaciones-container container-fluid col-12 text-center">
-            <h3 class="row">Cotizaciones</h3>
+            <h3 class="row cotizaciones-container__title">Cotizaciones</h3>
             <div>
-                <li class="header-items">
-                    <ul>Marca</ul>
-                    <ul>Modelo</ul>
-                    <ul>Año</ul>
-                    <ul>Suma Asegurada</ul>
-                    <ul>Cobertura: Valor Cuota</ul>
-                </li>
+                <ul class="cotizaciones-container__header-items header-items">
+                    <li class="marca">Marca</li>
+                    <li class="modelo">Modelo</li>
+                    <li class="anio">Año</li>
+                    <li class="suma-asegurada">Suma Asegurada</li>
+                    <li class="cotizaciones">Cobertura: Valor Cuota</li>
+                </ul>
             </div>
             
             <div class="cotizaciones-list" id="contenedorCotizaciones">
-                <!-- <li>Cotizaciones</li> -->
+                
             </div>    
+
+            <div class="deleteButton" id="delete-button">
+                <input type="submit" value="Eliminar todas las cotizaciones" class="delete-button-class"></input>
             </div>
+        </div>
     </div>
     
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="./scripts/index.js"></script>
 </body>
 </html>
